@@ -3,64 +3,122 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NetDiseña</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetDiseña | Diseñador de redes</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:25px;background:#f1f5f9;font-family:Arial,sans-serif;color:#172033}
-main{max-width:1050px;margin:auto}
-header{background:#174b80;color:white;padding:25px;border-radius:14px}
-header h1{margin:0 0 8px}
-.panel{background:white;padding:22px;margin:18px 0;border-radius:13px;border:1px solid #dce4ed}
-h2{color:#174b80}
+body{margin:0;background:#f1f5f9;color:#18283b;font-family:Arial,sans-serif}
+header{background:#123e6b;color:white;padding:28px max(20px,calc((100% - 1150px)/2))}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0;color:#dcecff}
+main{max-width:1150px;margin:25px auto;padding:0 16px}
+.panel{background:white;border:1px solid #dce4ed;border-radius:13px;padding:22px;margin-bottom:20px}
+h2{margin:0 0 17px;color:#174b7b;font-size:20px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
-label{display:block;font-weight:bold;font-size:13px;margin-bottom:6px}
-input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
-button{padding:12px 17px;margin:12px 7px 0 0;border:0;border-radius:8px;background:#1767a8;color:white;font-weight:bold;cursor:pointer}
-.secondary{background:#e5edf5;color:#17436d}
-table{width:100%;border-collapse:collapse;margin-top:15px}
-th,td{padding:11px;text-align:left;border-bottom:1px solid #ddd}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+input,select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px;background:white}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+button{border:0;border-radius:8px;padding:12px 17px;background:#1767a8;color:white;font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(.92)}
+button.secondary{background:#e5edf5;color:#17436d}
+#message{display:none;padding:13px;border-radius:8px;margin-top:15px}
+#message.success{display:block;background:#e8f7ed;color:#176337}
+#message.error{display:block;background:#ffeded;color:#a12626}
+.note{font-size:13px;color:#64748b;line-height:1.5}
+.preview{width:100%;overflow:auto;background:#f8fafc;border:1px solid #dce4ed;border-radius:10px;padding:8px}
+#planSvg{display:block;width:100%;min-width:650px;height:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:11px;border-bottom:1px solid #e2e8f0;text-align:left}
 th{background:#eaf2fa;color:#17436d}
 .table-wrap{overflow-x:auto}
-#message{display:none;padding:13px;margin-top:15px;border-radius:8px}
-.error{display:block!important;background:#ffe9e9;color:#a12626}
-.success{display:block!important;background:#e6f7eb;color:#176337}
-.note{font-size:13px;color:#64748b;line-height:1.5}
-footer{text-align:center;color:#64748b;padding:18px;font-size:12px}
-@media print{button{display:none}body{background:white}}
+footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
+@media(max-width:600px){header{padding:22px 16px}.panel{padding:15px}}
+@media print{
+ body{background:white}
+ header{padding:15px 20px}
+ main{max-width:none;margin:10px}
+ .no-print{display:none!important}
+ .panel{box-shadow:none;break-inside:avoid}
+ .preview{border:0}
+ #planSvg{min-width:0}
+}
 </style>
 </head>
 <body>
-<main>
 
 <header>
 <h1>NetDiseña</h1>
-<p>Sistema de planificación y direccionamiento de redes informáticas</p>
+<p>Sistema de diseño, planificación y documentación de redes informáticas</p>
 </header>
 
-<section class="panel">
-<h2>1. Datos del proyecto</h2>
+<main>
+
+<section class="panel no-print">
+<h2>1. Configuración del proyecto</h2>
+
 <div class="grid">
-<div><label>Nombre del proyecto</label><input id="project" value="Red informática - I.E. Perú BIRF"></div>
-<div><label>Dirección de red</label><input id="network" value="192.168.10.0"></div>
-<div><label>Máscara de subred</label><input id="mask" value="255.255.255.0"></div>
-<div><label>IP del router</label><input id="router" value="192.168.10.1"></div>
-<div><label>IP del switch</label><input id="switch" value="192.168.10.2"></div>
-<div><label>Cantidad de computadoras</label><input id="count" type="number" min="1" max="200" value="5"></div>
-<div><label>Primera IP de las computadoras</label><input id="first" value="192.168.10.10"></div>
+<div>
+<label for="project">Nombre del proyecto</label>
+<input id="project" value="Red informática - I.E. Perú BIRF">
+</div>
+<div>
+<label for="institution">Institución</label>
+<input id="institution" value="Institución Educativa Perú BIRF">
+</div>
+<div>
+<label for="network">Dirección de red</label>
+<input id="network" value="192.168.10.0">
+</div>
+<div>
+<label for="mask">Máscara de subred</label>
+<select id="mask">
+<option value="24">255.255.255.0 (/24)</option>
+</select>
+</div>
+<div>
+<label for="router">IP del router</label>
+<input id="router" value="192.168.10.1">
+</div>
+<div>
+<label for="switch">IP del switch</label>
+<input id="switch" value="192.168.10.2">
+</div>
+<div>
+<label for="count">Cantidad de computadoras</label>
+<input id="count" type="number" min="1" max="20" value="5">
+</div>
+<div>
+<label for="first">Primera IP de computadoras</label>
+<input id="first" value="192.168.10.10">
+</div>
 </div>
 
+<div class="actions">
 <button type="button" id="generate">GENERAR PLAN DE RED</button>
+<button type="button" class="secondary" id="downloadPng">DESCARGAR IMAGEN PNG</button>
+<button type="button" class="secondary" id="downloadCsv">DESCARGAR CSV</button>
 <button type="button" class="secondary" id="print">IMPRIMIR / GUARDAR PDF</button>
-<button type="button" class="secondary" id="csv">DESCARGAR CSV</button>
+</div>
 
-<div id="message"></div>
-<p class="note">Las direcciones IP son una propuesta inicial. Antes de implementar la red real, verifica que no existan conflictos con la red de la institución.</p>
+<div id="message" role="status"></div>
+<p class="note">Configura los datos y genera el plano. El sistema valida las direcciones IP y construye automáticamente la topología y la tabla.</p>
 </section>
 
 <section class="panel">
-<h2>2. Tabla de direccionamiento IP</h2>
-<p id="project-name">Genera el plan para visualizar los dispositivos.</p>
+<h2>2. Plano visual de la red</h2>
+<div class="preview">
+<svg id="planSvg" xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 1200 780" role="img" aria-label="Plano de topología de red">
+<rect width="1200" height="780" fill="#f4f7fb"/>
+<text x="600" y="100" text-anchor="middle" font-size="30" fill="#173f6b">NETDISEÑA</text>
+<text x="600" y="145" text-anchor="middle" font-size="20" fill="#526579">Pulsa Generar plan de red para crear el plano</text>
+</svg>
+</div>
+<p class="note">El plano representa la conexión lógica propuesta. Las ubicaciones de los equipos son ilustrativas, no un plano arquitectónico a escala.</p>
+</section>
+
+<section class="panel">
+<h2>3. Tabla de direccionamiento IP</h2>
 <div class="table-wrap">
 <table>
 <thead>
@@ -72,19 +130,22 @@ footer{text-align:center;color:#64748b;padding:18px;font-size:12px}
 </tr>
 </thead>
 <tbody id="results">
-<tr><td colspan="4">Aún no se ha generado el plan.</td></tr>
+<tr><td colspan="4">Genera el plan para visualizar las direcciones.</td></tr>
 </tbody>
 </table>
 </div>
 </section>
 
 <section class="panel">
-<h2>3. Características de la red</h2>
-<p><b>Topología:</b> estrella.</p>
-<p><b>Medio de transmisión:</b> cable UTP categoría 6.</p>
-<p><b>Equipo central:</b> switch Gigabit de 16 puertos.</p>
-<p><b>Conectividad:</b> router Gigabit con Wi-Fi 6.</p>
-<p><b>Dispositivos:</b> cinco computadoras, un router y un switch.</p>
+<h2>4. Recursos y características</h2>
+<ul>
+<li>Topología de red: estrella.</li>
+<li>Medio de transmisión: cable UTP categoría 6.</li>
+<li>Equipo central: switch Gigabit de 16 puertos.</li>
+<li>Conectividad: router Gigabit con Wi-Fi 6.</li>
+<li>Estaciones de trabajo: cinco computadoras, según la configuración inicial.</li>
+<li>Conexión individual de cada computadora al switch.</li>
+</ul>
 </section>
 
 <footer>NetDiseña · Proyecto académico · 2026</footer>
@@ -92,185 +153,248 @@ footer{text-align:center;color:#64748b;padding:18px;font-size:12px}
 
 <script>
 (function(){
+"use strict";
 
-const get = id => document.getElementById(id);
+const $ = id => document.getElementById(id);
+let currentRows = [];
+let currentSvg = "";
 
 function parseIP(value){
-  const parts = value.trim().split(".");
-  if(parts.length !== 4) return null;
-
-  const numbers = [];
-
-  for(const part of parts){
+  const p = value.trim().split(".");
+  if(p.length !== 4) return null;
+  const a = [];
+  for(const part of p){
     if(!/^\d{1,3}$/.test(part)) return null;
     const n = Number(part);
     if(n < 0 || n > 255) return null;
-    numbers.push(n);
+    a.push(n);
   }
-
-  return numbers;
+  return a;
 }
 
-function sameNetwork(a,b){
-  return a[0]===b[0] &&
-         a[1]===b[1] &&
-         a[2]===b[2];
+function sameSubnet(a,b){
+  return a[0]===b[0] && a[1]===b[1] && a[2]===b[2];
+}
+
+function ipString(a){
+  return a.join(".");
 }
 
 function showMessage(text,type){
-  const box = get("message");
-  box.textContent = text;
-  box.className = type;
+  const el=$("message");
+  el.textContent=text;
+  el.className=type;
 }
 
-let generatedRows = [];
+function escapeXml(text){
+  return String(text).replace(/[<>&"']/g,c=>({
+    "<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;","'":"&apos;"
+  })[c]);
+}
+
+function makeSvg(rows, project, institution){
+  const pcs=rows.filter(r=>r.name.startsWith("PC"));
+  const width=1200;
+  const height=780;
+  let s=`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">
+  <rect width="1200" height="780" fill="#f4f7fb"/>
+  <rect x="30" y="25" width="1140" height="125" rx="18" fill="#173f6b"/>
+  <text x="65" y="75" font-size="34" font-weight="bold" fill="white">NETDISEÑA</text>
+  <text x="65" y="112" font-size="19" fill="#dcecff">PLANO DE DISEÑO DE RED INFORMÁTICA</text>
+  <text x="1135" y="83" text-anchor="end" font-size="20" fill="white">2026</text>
+  <rect x="30" y="170" width="1140" height="65" rx="12" fill="white" stroke="#d8e1ec"/>
+  <text x="55" y="198" font-size="17" font-weight="bold" fill="#173f6b">${escapeXml(institution)}</text>
+  <text x="55" y="221" font-size="14" fill="#526579">${escapeXml(project)}</text>
+  <text x="600" y="280" text-anchor="middle" font-size="22" font-weight="bold" fill="#173f6b">TOPOLOGÍA FÍSICA PROPUESTA: ESTRELLA</text>
+  <rect x="430" y="310" width="340" height="65" rx="12" fill="#e8f2fc" stroke="#3778ad" stroke-width="3"/>
+  <text x="600" y="338" text-anchor="middle" font-size="19" font-weight="bold" fill="#17436d">ROUTER GIGABIT</text>
+  <text x="600" y="359" text-anchor="middle" font-size="15" fill="#17436d">${rows[0].ip}</text>
+  <path d="M600 375 V415" stroke="#53677c" stroke-width="4"/>
+  <rect x="430" y="415" width="340" height="65" rx="12" fill="#dff3ec" stroke="#27805d" stroke-width="3"/>
+  <text x="600" y="443" text-anchor="middle" font-size="19" font-weight="bold" fill="#176044">SWITCH GIGABIT · 16 PUERTOS</text>
+  <text x="600" y="464" text-anchor="middle" font-size="15" fill="#176044">${rows[1].ip}</text>
+  `;
+  const n=pcs.length;
+  const spacing= Math.min(190, 1060/(n||1));
+  const start=600-(n-1)*spacing/2;
+  pcs.forEach((pc,i)=>{
+    const x=start+i*spacing;
+    const y=595;
+    s+=`
+    <path d="M600 480 L${x} ${y}" stroke="#5b7c99" stroke-width="3" fill="none"/>
+    <rect x="${x-76}" y="${y}" width="152" height="83" rx="12" fill="white" stroke="#7b91a8" stroke-width="2"/>
+    <text x="${x}" y="${y+31}" text-anchor="middle" font-size="19" font-weight="bold" fill="#20364d">${escapeXml(pc.name)}</text>
+    <text x="${x}" y="${y+56}" text-anchor="middle" font-size="14" fill="#53677c">${pc.ip}</text>`;
+  });
+  s+=`
+  <text x="600" y="725" text-anchor="middle" font-size="17" fill="#475569">Cableado UTP categoría 6 · Un enlace independiente por computadora</text>
+  </svg>`;
+  return s;
+}
 
 function generatePlan(){
+  try{
+    const network=parseIP($("network").value);
+    const router=parseIP($("router").value);
+    const sw=parseIP($("switch").value);
+    const first=parseIP($("first").value);
+    const count=Number($("count").value);
 
-  const network = parseIP(get("network").value);
-  const mask = parseIP(get("mask").value);
-  const router = parseIP(get("router").value);
-  const sw = parseIP(get("switch").value);
-  const first = parseIP(get("first").value);
-  const count = Number(get("count").value);
-
-  if(!network || !mask || !router || !sw || !first){
-    showMessage("ERROR: Revisa las direcciones IP. Deben tener cuatro números separados por puntos.","error");
-    return;
-  }
-
-  if(mask.join(".") !== "255.255.255.0"){
-    showMessage("ERROR: Utiliza la máscara 255.255.255.0.","error");
-    return;
-  }
-
-  if(network[3] !== 0){
-    showMessage("ERROR: La dirección de red debe terminar en .0. Ejemplo: 192.168.10.0","error");
-    return;
-  }
-
-  if(!Number.isInteger(count) || count < 1 || count > 200){
-    showMessage("ERROR: La cantidad de computadoras debe estar entre 1 y 200.","error");
-    return;
-  }
-
-  const devices = [
-    {name:"Router",ip:router},
-    {name:"Switch",ip:sw}
-  ];
-
-  if(!sameNetwork(network,router) || !sameNetwork(network,sw)){
-    showMessage("ERROR: El router y el switch deben pertenecer a la dirección de red indicada.","error");
-    return;
-  }
-
-  if(router[3]===0 || router[3]===255 ||
-     sw[3]===0 || sw[3]===255){
-    showMessage("ERROR: Router y switch necesitan direcciones IP válidas.","error");
-    return;
-  }
-
-  if(router.join(".")===sw.join(".")){
-    showMessage("ERROR: Router y switch no pueden compartir la misma IP.","error");
-    return;
-  }
-
-  if(!sameNetwork(network,first)){
-    showMessage("ERROR: La primera IP de las computadoras debe pertenecer a la misma red.","error");
-    return;
-  }
-
-  if(first[3]===0 || first[3]+count-1>254){
-    showMessage("ERROR: El rango de computadoras excede las direcciones disponibles.","error");
-    return;
-  }
-
-  for(let i=0;i<count;i++){
-    const ip = [...first];
-    ip[3] += i;
-    devices.push({name:"PC-"+String(i+1).padStart(2,"0"),ip});
-  }
-
-  const used = new Set();
-
-  for(const device of devices){
-    const address = device.ip.join(".");
-    if(used.has(address)){
-      showMessage("ERROR: Hay direcciones IP repetidas. Cambia la IP inicial de las computadoras.","error");
-      return;
+    if(!network||!router||!sw||!first){
+      showMessage("Dirección IP inválida. Usa cuatro números separados por puntos.","error");
+      return false;
     }
-    used.add(address);
-  }
 
-  generatedRows = devices.map(device=>({
-    name:device.name,
-    ip:device.ip.join("."),
-    mask:"255.255.255.0",
-    gateway:device.name==="Router" ? "—" : router.join(".")
-  }));
+    if(network[3]!==0){
+      showMessage("La dirección de red debe terminar en .0. Ejemplo: 192.168.10.0","error");
+      return false;
+    }
 
-  const tbody = get("results");
-  tbody.innerHTML = "";
+    if(!Number.isInteger(count)||count<1||count>20){
+      showMessage("La cantidad de computadoras debe estar entre 1 y 20.","error");
+      return false;
+    }
 
-  for(const row of generatedRows){
-    const tr = document.createElement("tr");
+    if(!sameSubnet(network,router)||!sameSubnet(network,sw)||!sameSubnet(network,first)){
+      showMessage("Todos los dispositivos deben pertenecer a la red indicada.","error");
+      return false;
+    }
 
-    [row.name,row.ip,row.mask,row.gateway].forEach(value=>{
-      const td = document.createElement("td");
-      td.textContent = value;
-      tr.appendChild(td);
+    if(router[3]===0||router[3]===255||sw[3]===0||sw[3]===255||
+       first[3]===0||first[3]+count-1>254){
+      showMessage("Una dirección está fuera del rango válido de equipos.","error");
+      return false;
+    }
+
+    if(ipString(router)===ipString(sw)){
+      showMessage("El router y el switch no pueden tener la misma dirección IP.","error");
+      return false;
+    }
+
+    const addresses=new Set([ipString(router),ipString(sw)]);
+    currentRows=[
+      {name:"Router",ip:ipString(router),mask:"255.255.255.0",gateway:"—"},
+      {name:"Switch",ip:ipString(sw),mask:"255.255.255.0",gateway:ipString(router)}
+    ];
+
+    for(let i=0;i<count;i++){
+      const ip=[first[0],first[1],first[2],first[3]+i];
+      const str=ipString(ip);
+      if(addresses.has(str)){
+        showMessage("Hay direcciones IP repetidas. Cambia la primera IP de las computadoras.","error");
+        return false;
+      }
+      addresses.add(str);
+      currentRows.push({
+        name:"PC-"+String(i+1).padStart(2,"0"),
+        ip:str,
+        mask:"255.255.255.0",
+        gateway:ipString(router)
+      });
+    }
+
+    const tbody=$("results");
+    tbody.replaceChildren();
+
+    currentRows.forEach(row=>{
+      const tr=document.createElement("tr");
+      [row.name,row.ip,row.mask,row.gateway].forEach(value=>{
+        const td=document.createElement("td");
+        td.textContent=value;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
     });
 
-    tbody.appendChild(tr);
+    $("planSvg").outerHTML=makeSvg(
+      currentRows,
+      $("project").value,
+      $("institution").value
+    );
+    currentSvg=makeSvg(currentRows,$("project").value,$("institution").value);
+    showMessage("¡Plan generado correctamente! Se han creado el plano y la tabla de "+currentRows.length+" dispositivos.","success");
+    return true;
+  }catch(error){
+    showMessage("No se pudo generar el plan: "+error.message,"error");
+    return false;
+  }
+}
+
+function downloadPNG(){
+  if(!currentRows.length){
+    if(!generatePlan()) return;
   }
 
-  get("project-name").textContent =
-    "Proyecto: " + get("project").value;
+  const svgBlob=new Blob([currentSvg],{type:"image/svg+xml;charset=utf-8"});
+  const url=URL.createObjectURL(svgBlob);
+  const img=new Image();
 
-  showMessage(
-    "¡ÉXITO! Plan generado correctamente. Se registraron " +
-    generatedRows.length + " dispositivos.",
-    "success"
-  );
+  img.onload=function(){
+    const canvas=document.createElement("canvas");
+    canvas.width=2400;
+    canvas.height=1560;
+    const ctx=canvas.getContext("2d");
+    ctx.fillStyle="#f4f7fb";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+
+    canvas.toBlob(function(blob){
+      if(!blob){
+        showMessage("No se pudo crear la imagen PNG.","error");
+        return;
+      }
+      const link=document.createElement("a");
+      const pngUrl=URL.createObjectURL(blob);
+      link.href=pngUrl;
+      link.download="NetDisena_Plano_Red.png";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(()=>URL.revokeObjectURL(pngUrl),1500);
+      showMessage("Imagen PNG descargada correctamente.","success");
+    },"image/png");
+  };
+
+  img.onerror=function(){
+    URL.revokeObjectURL(url);
+    showMessage("Error al convertir el plano en imagen.","error");
+  };
+
+  img.src=url;
 }
 
 function downloadCSV(){
-  if(generatedRows.length===0){
-    generatePlan();
-  }
+  if(!currentRows.length&&!generatePlan())return;
 
-  if(generatedRows.length===0) return;
-
-  const lines = [
+  const data=[
     ["Dispositivo","Direccion IP","Mascara","Puerta de enlace"],
-    ...generatedRows.map(r=>[r.name,r.ip,r.mask,r.gateway])
+    ...currentRows.map(r=>[r.name,r.ip,r.mask,r.gateway])
   ];
-
-  const content = "\uFEFF" + lines.map(row=>
+  const csv="\uFEFF"+data.map(row=>
     row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")
   ).join("\r\n");
 
-  const blob = new Blob([content],{type:"text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-
-  a.href = url;
-  a.download = "NetDisena_direccionamiento.csv";
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="NetDisena_Direccionamiento.csv";
   document.body.appendChild(a);
   a.click();
   a.remove();
-
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
 }
 
-get("generate").addEventListener("click",generatePlan);
-get("print").addEventListener("click",()=>window.print());
-get("csv").addEventListener("click",downloadCSV);
+$("generate").addEventListener("click",generatePlan);
+$("downloadPng").addEventListener("click",downloadPNG);
+$("downloadCsv").addEventListener("click",downloadCSV);
+$("print").addEventListener("click",()=>window.print());
 
 generatePlan();
 
 })();
 </script>
-
 </body>
 </html>
