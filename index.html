@@ -3,39 +3,39 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NetDiseña | Planificador de redes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NetDiseña</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:25px;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+body{margin:0;padding:25px;background:#f1f5f9;font-family:Arial,sans-serif;color:#172033}
 main{max-width:1050px;margin:auto}
-header{background:linear-gradient(135deg,#123b70,#1767a8);color:white;padding:28px;border-radius:16px}
-h1{margin:0 0 8px}
-.panel{background:white;padding:22px;margin:18px 0;border-radius:14px;border:1px solid #dce4ed}
-h2{color:#17436d;font-size:20px}
+header{background:#174b80;color:white;padding:25px;border-radius:14px}
+header h1{margin:0 0 8px}
+.panel{background:white;padding:22px;margin:18px 0;border-radius:13px;border:1px solid #dce4ed}
+h2{color:#174b80}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
-label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
-input{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
-button{padding:12px 17px;border:0;border-radius:8px;background:#1767a8;color:white;font-weight:bold;cursor:pointer;margin:12px 5px 0 0}
+label{display:block;font-weight:bold;font-size:13px;margin-bottom:6px}
+input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+button{padding:12px 17px;margin:12px 7px 0 0;border:0;border-radius:8px;background:#1767a8;color:white;font-weight:bold;cursor:pointer}
 .secondary{background:#e5edf5;color:#17436d}
 table{width:100%;border-collapse:collapse;margin-top:15px}
-th,td{text-align:left;padding:11px;border-bottom:1px solid #e5eaf1}
-th{background:#edf4fb;color:#17436d}
+th,td{padding:11px;text-align:left;border-bottom:1px solid #ddd}
+th{background:#eaf2fa;color:#17436d}
 .table-wrap{overflow-x:auto}
+#message{display:none;padding:13px;margin-top:15px;border-radius:8px}
+.error{display:block!important;background:#ffe9e9;color:#a12626}
+.success{display:block!important;background:#e6f7eb;color:#176337}
 .note{font-size:13px;color:#64748b;line-height:1.5}
-#message{margin-top:15px;padding:12px;border-radius:8px;display:none}
-.error{display:block!important;background:#fff0f0;color:#a12727}
-.success{display:block!important;background:#eaf8ef;color:#176337}
-footer{text-align:center;color:#64748b;font-size:12px;padding:18px}
-@media(max-width:600px){body{padding:12px}.panel{padding:15px}}
-@media print{body{background:white}button{display:none}header{background:#17436d!important;color:white!important}}
+footer{text-align:center;color:#64748b;padding:18px;font-size:12px}
+@media print{button{display:none}body{background:white}}
 </style>
 </head>
 <body>
 <main>
+
 <header>
 <h1>NetDiseña</h1>
-<p>Planificador de direccionamiento y documentación de redes informáticas</p>
+<p>Sistema de planificación y direccionamiento de redes informáticas</p>
 </header>
 
 <section class="panel">
@@ -50,185 +50,227 @@ footer{text-align:center;color:#64748b;font-size:12px;padding:18px}
 <div><label>Primera IP de las computadoras</label><input id="first" value="192.168.10.10"></div>
 </div>
 
-<button type="button" id="generate">Generar plan de red</button>
-<button type="button" class="secondary" id="print">Imprimir / Guardar PDF</button>
-<button type="button" class="secondary" id="csv">Descargar CSV</button>
+<button type="button" id="generate">GENERAR PLAN DE RED</button>
+<button type="button" class="secondary" id="print">IMPRIMIR / GUARDAR PDF</button>
+<button type="button" class="secondary" id="csv">DESCARGAR CSV</button>
+
 <div id="message"></div>
-<p class="note">Las direcciones son una propuesta inicial. Antes de implementar la red real, verifica que no entren en conflicto con el direccionamiento existente de la institución.</p>
+<p class="note">Las direcciones IP son una propuesta inicial. Antes de implementar la red real, verifica que no existan conflictos con la red de la institución.</p>
 </section>
 
 <section class="panel">
 <h2>2. Tabla de direccionamiento IP</h2>
-<p class="note" id="project-name">Genera el plan para visualizar los dispositivos.</p>
+<p id="project-name">Genera el plan para visualizar los dispositivos.</p>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Dispositivo</th><th>Dirección IP</th><th>Máscara</th><th>Puerta de enlace</th></tr></thead>
-<tbody id="results"><tr><td colspan="4">Aún no se ha generado el plan.</td></tr></tbody>
+<thead>
+<tr>
+<th>Dispositivo</th>
+<th>Dirección IP</th>
+<th>Máscara</th>
+<th>Puerta de enlace</th>
+</tr>
+</thead>
+<tbody id="results">
+<tr><td colspan="4">Aún no se ha generado el plan.</td></tr>
+</tbody>
 </table>
 </div>
 </section>
 
 <section class="panel">
-<h2>3. Hoja de implementación</h2>
-<p>Topología propuesta: <strong>estrella</strong>.</p>
-<p>Medio de transmisión: <strong>cable UTP categoría 6</strong>.</p>
-<p>Equipo central: <strong>switch Gigabit de 16 puertos</strong>.</p>
-<p>Conectividad: <strong>router Gigabit con Wi-Fi 6</strong>.</p>
-<p>La configuración definitiva debe comprobarse durante la instalación física.</p>
+<h2>3. Características de la red</h2>
+<p><b>Topología:</b> estrella.</p>
+<p><b>Medio de transmisión:</b> cable UTP categoría 6.</p>
+<p><b>Equipo central:</b> switch Gigabit de 16 puertos.</p>
+<p><b>Conectividad:</b> router Gigabit con Wi-Fi 6.</p>
+<p><b>Dispositivos:</b> cinco computadoras, un router y un switch.</p>
 </section>
 
-<footer>NetDiseña · Herramienta académica de planificación de redes · 2026</footer>
+<footer>NetDiseña · Proyecto académico · 2026</footer>
 </main>
 
 <script>
 (function(){
-"use strict";
 
-const $ = id => document.getElementById(id);
-let currentRows = [];
+const get = id => document.getElementById(id);
 
-function ipToNumber(ip){
- const parts=ip.trim().split(".");
- if(parts.length!==4)return null;
- let n=0;
- for(const p of parts){
-  if(!/^\d{1,3}$/.test(p))return null;
-  const v=Number(p);
-  if(v<0||v>255)return null;
-  n=n*256+v;
- }
- return n;
+function parseIP(value){
+  const parts = value.trim().split(".");
+  if(parts.length !== 4) return null;
+
+  const numbers = [];
+
+  for(const part of parts){
+    if(!/^\d{1,3}$/.test(part)) return null;
+    const n = Number(part);
+    if(n < 0 || n > 255) return null;
+    numbers.push(n);
+  }
+
+  return numbers;
 }
 
-function numberToIp(n){
- return [24,16,8,0].map(s=>(n>>>s)&255).join(".");
+function sameNetwork(a,b){
+  return a[0]===b[0] &&
+         a[1]===b[1] &&
+         a[2]===b[2];
 }
 
-function message(text,type){
- const box=$("message");
- box.textContent=text;
- box.className=type;
+function showMessage(text,type){
+  const box = get("message");
+  box.textContent = text;
+  box.className = type;
 }
+
+let generatedRows = [];
 
 function generatePlan(){
- const network=ipToNumber($("network").value);
- const mask=ipToNumber($("mask").value);
- const router=ipToNumber($("router").value);
- const sw=ipToNumber($("switch").value);
- const first=ipToNumber($("first").value);
- const count=Number($("count").value);
- const maskText=$("mask").value.trim();
- const routerText=$("router").value.trim();
 
- if([network,mask,router,sw,first].some(v=>v===null)){
-  message("Revisa las direcciones IP. Ejemplo: 192.168.10.1","error");
-  return;
- }
+  const network = parseIP(get("network").value);
+  const mask = parseIP(get("mask").value);
+  const router = parseIP(get("router").value);
+  const sw = parseIP(get("switch").value);
+  const first = parseIP(get("first").value);
+  const count = Number(get("count").value);
 
- if(!Number.isInteger(count)||count<1||count>200){
-  message("La cantidad debe estar entre 1 y 200.","error");
-  return;
- }
+  if(!network || !mask || !router || !sw || !first){
+    showMessage("ERROR: Revisa las direcciones IP. Deben tener cuatro números separados por puntos.","error");
+    return;
+  }
 
- if(mask!==4294967040){
-  message("Utiliza la máscara 255.255.255.0 (/24).","error");
-  return;
- }
+  if(mask.join(".") !== "255.255.255.0"){
+    showMessage("ERROR: Utiliza la máscara 255.255.255.0.","error");
+    return;
+  }
 
- const base=network&mask;
- const broadcast=base+255;
+  if(network[3] !== 0){
+    showMessage("ERROR: La dirección de red debe terminar en .0. Ejemplo: 192.168.10.0","error");
+    return;
+  }
 
- if(base!==network){
-  message("La dirección de red debe terminar en .0 para esta máscara.","error");
-  return;
- }
+  if(!Number.isInteger(count) || count < 1 || count > 200){
+    showMessage("ERROR: La cantidad de computadoras debe estar entre 1 y 200.","error");
+    return;
+  }
 
- if(router===base||router===broadcast||sw===base||sw===broadcast||router===sw){
-  message("Router y switch deben tener direcciones válidas y distintas.","error");
-  return;
- }
+  const devices = [
+    {name:"Router",ip:router},
+    {name:"Switch",ip:sw}
+  ];
 
- if((router&mask)!==base||(sw&mask)!==base){
-  message("Router y switch deben pertenecer a la red indicada.","error");
-  return;
- }
+  if(!sameNetwork(network,router) || !sameNetwork(network,sw)){
+    showMessage("ERROR: El router y el switch deben pertenecer a la dirección de red indicada.","error");
+    return;
+  }
 
- if(first<=base||first+count-1>=broadcast){
-  message("El rango de computadoras sale del rango válido.","error");
-  return;
- }
+  if(router[3]===0 || router[3]===255 ||
+     sw[3]===0 || sw[3]===255){
+    showMessage("ERROR: Router y switch necesitan direcciones IP válidas.","error");
+    return;
+  }
 
- let addresses=[router,sw];
- for(let i=0;i<count;i++)addresses.push(first+i);
+  if(router.join(".")===sw.join(".")){
+    showMessage("ERROR: Router y switch no pueden compartir la misma IP.","error");
+    return;
+  }
 
- if(new Set(addresses).size!==addresses.length){
-  message("Hay direcciones IP repetidas. Cambia la IP inicial.","error");
-  return;
- }
+  if(!sameNetwork(network,first)){
+    showMessage("ERROR: La primera IP de las computadoras debe pertenecer a la misma red.","error");
+    return;
+  }
 
- currentRows=[
-  {device:"Router",ip:routerText,mask:maskText,gateway:"—"},
-  {device:"Switch",ip:$("switch").value.trim(),mask:maskText,gateway:routerText}
- ];
+  if(first[3]===0 || first[3]+count-1>254){
+    showMessage("ERROR: El rango de computadoras excede las direcciones disponibles.","error");
+    return;
+  }
 
- for(let i=0;i<count;i++){
-  currentRows.push({
-   device:"PC-"+String(i+1).padStart(2,"0"),
-   ip:numberToIp(first+i),
-   mask:maskText,
-   gateway:routerText
-  });
- }
+  for(let i=0;i<count;i++){
+    const ip = [...first];
+    ip[3] += i;
+    devices.push({name:"PC-"+String(i+1).padStart(2,"0"),ip});
+  }
 
- const tbody=$("results");
- const fragment=document.createDocumentFragment();
+  const used = new Set();
 
- currentRows.forEach(row=>{
-  const tr=document.createElement("tr");
-  [row.device,row.ip,row.mask,row.gateway].forEach(value=>{
-   const td=document.createElement("td");
-   td.textContent=value;
-   tr.appendChild(td);
-  });
-  fragment.appendChild(tr);
- });
+  for(const device of devices){
+    const address = device.ip.join(".");
+    if(used.has(address)){
+      showMessage("ERROR: Hay direcciones IP repetidas. Cambia la IP inicial de las computadoras.","error");
+      return;
+    }
+    used.add(address);
+  }
 
- tbody.replaceChildren(fragment);
- $("project-name").textContent="Proyecto: "+$("project").value;
- message("Plan generado correctamente. Dispositivos: "+currentRows.length,"success");
+  generatedRows = devices.map(device=>({
+    name:device.name,
+    ip:device.ip.join("."),
+    mask:"255.255.255.0",
+    gateway:device.name==="Router" ? "—" : router.join(".")
+  }));
+
+  const tbody = get("results");
+  tbody.innerHTML = "";
+
+  for(const row of generatedRows){
+    const tr = document.createElement("tr");
+
+    [row.name,row.ip,row.mask,row.gateway].forEach(value=>{
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  }
+
+  get("project-name").textContent =
+    "Proyecto: " + get("project").value;
+
+  showMessage(
+    "¡ÉXITO! Plan generado correctamente. Se registraron " +
+    generatedRows.length + " dispositivos.",
+    "success"
+  );
 }
 
 function downloadCSV(){
- if(!currentRows.length)generatePlan();
- if(!currentRows.length)return;
+  if(generatedRows.length===0){
+    generatePlan();
+  }
 
- const rows=[
-  ["Dispositivo","Direccion IP","Mascara","Puerta de enlace"],
-  ...currentRows.map(r=>[r.device,r.ip,r.mask,r.gateway])
- ];
+  if(generatedRows.length===0) return;
 
- const csv="\uFEFF"+rows.map(row=>
-  row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(",")
- ).join("\r\n");
+  const lines = [
+    ["Dispositivo","Direccion IP","Mascara","Puerta de enlace"],
+    ...generatedRows.map(r=>[r.name,r.ip,r.mask,r.gateway])
+  ];
 
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download="NetDisena_direccionamiento.csv";
- document.body.appendChild(a);
- a.click();
- a.remove();
- URL.revokeObjectURL(url);
+  const content = "\uFEFF" + lines.map(row=>
+    row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")
+  ).join("\r\n");
+
+  const blob = new Blob([content],{type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "NetDisena_direccionamiento.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
-$("generate").addEventListener("click",generatePlan);
-$("print").addEventListener("click",()=>window.print());
-$("csv").addEventListener("click",downloadCSV);
+get("generate").addEventListener("click",generatePlan);
+get("print").addEventListener("click",()=>window.print());
+get("csv").addEventListener("click",downloadCSV);
 
 generatePlan();
-console.info("NetDiseña cargado correctamente.");
+
 })();
 </script>
+
 </body>
 </html>
